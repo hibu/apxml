@@ -18,7 +18,7 @@
  along with APXML.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
 
 @interface APAttribute : NSObject {

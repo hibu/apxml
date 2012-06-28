@@ -63,7 +63,7 @@
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict {
 	APElement *newElement = [APElement elementWithName:elementName attributes:attributeDict];
 	if (rootElement == nil)
-		rootElement = [newElement retain];
+		rootElement = newElement;
 	
 	if (openElement != nil)
 	{
@@ -107,12 +107,6 @@
 	return rootElement;
 }
 
-- (void) dealloc
-{
-	[rootElement release];
-	
-	[super dealloc];
-}
 
 
 @end
@@ -131,7 +125,7 @@
  such.
 */
 + (id)documentWithXMLString:(NSString*)anXMLString {
-	return [[[APDocument alloc] initWithString:anXMLString] autorelease];
+	return [[APDocument alloc] initWithString:anXMLString];
 }
 
 /*
@@ -141,7 +135,7 @@
 - (id)initWithRootElement:(APElement*)aRootElement {
 	if (self = [super init])
 	{
-		rootElement = [aRootElement retain];
+		rootElement = aRootElement;
 	}
 	
 	return self;
@@ -155,13 +149,10 @@
 	{
 		APXMLBuilder *builder = [[APXMLBuilder alloc] init];
 		NSXMLParser *parser = [[NSXMLParser alloc] initWithData:[anXMLString dataUsingEncoding:NSUTF8StringEncoding]];
-		[parser setDelegate:builder];
+		[parser setDelegate:(id <NSXMLParserDelegate>)builder];
 		[parser parse];
 		
-		rootElement = [[builder rootElement] retain];
-		
-		[builder release];
-		[parser release];
+		rootElement = [builder rootElement];		
 	}
 	
 	return self;
@@ -181,7 +172,7 @@
 - (NSString*)prettyXML {
 	if (rootElement != nil)
 	{
-		NSMutableString *result = [[[NSMutableString alloc] init] autorelease];
+		NSMutableString *result = [[NSMutableString alloc] init];
 		[result appendString:@"<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n"];
 		[result appendString:[rootElement prettyXML:0]];
 		return result;
@@ -197,20 +188,13 @@
 - (NSString*)xml {
 	if (rootElement != nil)
 	{
-		NSMutableString *result = [[[NSMutableString alloc] init] autorelease];
+		NSMutableString *result = [[NSMutableString alloc] init];
 		[result appendString:@"<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n"];
 		[result appendString:[rootElement xml]];
 		return result;
 	}
 	else
 		return nil;
-}
-
-- (void) dealloc
-{
-	[rootElement release];
-	
-	[super dealloc];
 }
 
 

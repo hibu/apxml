@@ -18,21 +18,22 @@
  along with APXML.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+
 @class APAttribute;
 
 
 @interface APElement : NSObject {
 	NSString *name;
 	NSMutableString *value;
-	APElement *parent;
+	__weak APElement *parent;
 	
 	NSMutableDictionary *attributes;
 	NSMutableArray *childElements;
 }
 
 @property (readonly) NSString *name;
-@property (nonatomic, assign) APElement *parent;
+@property (nonatomic, weak) APElement *parent;
 
 + (id)elementWithName:(NSString*)aName;
 + (id)elementWithName:(NSString*)aName attributes:(NSDictionary*)someAttributes;
